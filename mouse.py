@@ -4,6 +4,12 @@ from pynput import keyboard
 class ScriptManager:
     is_script_paused = False
     logs_on = False
+    
+    def pause_keyboard_listener():
+        is_script_paused = ScriptManager.is_script_paused 
+        is_script_paused = False if is_script_paused else True
+        log(f'Teclado pausado: {is_script_paused}')
+
 
 class Actions:
     is_aimming = False
@@ -57,14 +63,11 @@ def log(msg, type='Log'):
         return
 
 def on_press(key):
-    is_script_paused = ScriptManager.is_script_paused 
-    
+  
     if key == keyboard.Key.delete:
-        
-        is_script_paused = False if is_script_paused else True
-        log(f'Teclado pausado: {is_script_paused}')
-
-    if not is_script_paused:
+       ScriptManager.pause_keyboard_listener()
+       
+    if not ScriptManager.is_script_paused:
         if key in (keyboard.Key.ctrl, keyboard.Key.ctrl_l, keyboard.Key.ctrl_r):
             Actions.switch_aim()
 
@@ -72,7 +75,6 @@ def on_press(key):
            Actions.hold_alt()
 
 
-#falta add a condição de is_script_paused
 def on_release(key):
     if not ScriptManager.is_script_paused:
         if key in (keyboard.Key.alt, keyboard.Key.alt_l, keyboard.Key.alt_r):
