@@ -1,15 +1,18 @@
 import pyautogui
 from pynput import keyboard
 
-is_aimming = False
-alt_holding = False
-is_script_paused = False
-logs_on = False
+class ScriptManager:
+    is_script_paused = False
+    logs_on = False
+
+class Actions:
+    is_aimming = False
+    alt_holding = False
 
 def log(msg, type='Log'):
-    global logs_on
     
-    if logs_on:
+    
+    if Actions.logs_on:
         compl = None
         if type == 'status':
             compl = 'Status: '
@@ -23,9 +26,13 @@ def log(msg, type='Log'):
         return
 
 def on_press(key):
-    global is_aimming, alt_holding, is_script_paused
+    is_script_paused = ScriptManager.is_script_paused 
+    is_aimming = Actions.is_aimming
+    alt_holding = Actions.alt_holding   
 
     if key == keyboard.Key.delete:
+        
+        
         is_script_paused = False if is_script_paused else True
         log(f'Teclado pausado: {is_script_paused}')
 
@@ -54,7 +61,7 @@ def on_press(key):
 
 #falta add a condição de is_script_paused
 def on_release(key):
-    global alt_holding
+    Actions.alt_holding
 
     if key in (keyboard.Key.alt, keyboard.Key.alt_l, keyboard.Key.alt_r):
         if alt_holding:
