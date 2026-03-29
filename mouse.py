@@ -7,7 +7,7 @@ class ScriptManager:
     
     def pause_keyboard_listener():
         is_script_paused = ScriptManager.is_script_paused 
-        is_script_paused = False if is_script_paused else True
+        ScriptManager.is_script_paused  = False if is_script_paused else True
         log(f'Teclado pausado: {is_script_paused}')
 
 
@@ -49,7 +49,7 @@ class Actions:
 
 def log(msg, type='Log'):
     
-    if Actions.logs_on:
+    if ScriptManager.logs_on:
         compl = None
         if type == 'status':
             compl = 'Status: '
