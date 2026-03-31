@@ -4,7 +4,7 @@ import subprocess, time
 
 class ScriptManager:
     is_script_paused = False
-    logs_on = False
+    logs_mode = {'on':True, 'mode':'important'}
     is_mouse_sensi_medium = True
     
     def pause_keyboard_listener():
@@ -103,15 +103,15 @@ class Actions:
 
 def log(msg, type='Log'):
     
-    if ScriptManager.logs_on:
+    if ScriptManager.logs_mode['on']:
         compl = None
-        if type == 'status':
-            compl = 'Status: '
+        if type == 'status' and not ScriptManager.logs_mode['mode'] == 'important':
+            compl = 'Msg:'
             
 
-        elif type == 'Log':
-            compl = 'Log: '
-        print(f'* {compl}{msg}')
+        elif type == 'Log' and ScriptManager.logs_mode['mode'] == 'important':
+            compl = 'Log:'
+        print(f'* {compl} {msg}')
 
     else:
         return
@@ -121,7 +121,9 @@ def on_press(key):
     if key == keyboard.Key.delete:
        ScriptManager.pause_keyboard_listener()
        
+    #finalizar
     if key == keyboard.Key.f3:
+        ScriptManager.change_mouse_sensi()
         return False
     
     if not ScriptManager.is_script_paused:
@@ -137,8 +139,6 @@ def on_release(key):
         if key in (keyboard.Key.alt, keyboard.Key.alt_l, keyboard.Key.alt_r):
             Actions.release_alt()
 
-ScriptManager.change_mouse_sensi()
-time.sleep(3)
 ScriptManager.change_mouse_sensi()
 
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
