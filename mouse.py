@@ -10,7 +10,22 @@ class ScriptManager:
     def pause_keyboard_listener():
         is_script_paused = ScriptManager.is_script_paused 
         ScriptManager.is_script_paused  = False if is_script_paused else True
-        log(f'Teclado pausado: {is_script_paused}')
+        ScriptManager.log(f'Teclado pausado: {is_script_paused}')
+        
+    def log(msg, type='Log'):
+        
+        if ScriptManager.logs_mode['on']:
+            compl = None
+            if type == 'status' and not ScriptManager.logs_mode['mode'] == 'important':
+                compl = 'Msg:'
+                
+
+            elif type == 'Log' and ScriptManager.logs_mode['mode'] == 'important':
+                compl = 'Log:'
+            print(f'* {compl} {msg}')
+
+        else:
+            return
         
     def manage_config(mode='start'):
         if mode == 'start':
@@ -78,43 +93,30 @@ class Actions:
                 #primeiro clica dps segura, pois unico clique nao atira
                 pyautogui.click(button='left')
                 pyautogui.mouseDown(button='left')  
-                log('click + segurar btn esquerdo')
+                ScriptManager.log('click + segurar btn esquerdo')
                 Actions.alt_holding = True
                 
     def release_alt():
         if Actions.alt_holding:
             
             pyautogui.mouseUp(button='left')
-            log('soltando btn esquerdo')
+            ScriptManager.log('soltando btn esquerdo')
             Actions.alt_holding = False
             
     def switch_aim():
         #verifica se é control, e alterna btn direito do mouse
         if Actions.is_aimming:
                 pyautogui.mouseUp(button='right')
-                log('soltando btn direito')
+                ScriptManager.log('soltando btn direito')
                 Actions.is_aimming = False
                 
         else:
             pyautogui.mouseDown(button='right')
-            log('segurando btn direito')
+            ScriptManager.log('segurando btn direito')
             Actions.is_aimming = True
 
 
-def log(msg, type='Log'):
-    
-    if ScriptManager.logs_mode['on']:
-        compl = None
-        if type == 'status' and not ScriptManager.logs_mode['mode'] == 'important':
-            compl = 'Msg:'
-            
 
-        elif type == 'Log' and ScriptManager.logs_mode['mode'] == 'important':
-            compl = 'Log:'
-        print(f'* {compl} {msg}')
-
-    else:
-        return
 
 def on_press(key):
   
@@ -124,6 +126,7 @@ def on_press(key):
     #finalizar
     if key == keyboard.Key.f3:
         ScriptManager.change_mouse_sensi()
+        ScriptManager.log
         return False
     
     if not ScriptManager.is_script_paused:
@@ -143,5 +146,5 @@ def on_release(key):
 ScriptManager.change_mouse_sensi()
 
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
-    log('Running', 'status')
+    ScriptManager.log('Running', 'status')
     listener.join()
