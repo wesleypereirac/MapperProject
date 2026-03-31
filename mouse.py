@@ -126,7 +126,7 @@ def on_press(key):
     #finalizar
     if key == keyboard.Key.f3:
         ScriptManager.change_mouse_sensi()
-        ScriptManager.log
+        ScriptManager.log('Finalizada execução, pressionar tecla', 'log')
         return False
     
     if not ScriptManager.is_script_paused:
@@ -146,5 +146,6 @@ def on_release(key):
 ScriptManager.change_mouse_sensi()
 
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
-    ScriptManager.log('Running', 'status')
+    ScriptManager.log('Running', 'log')
+    ScriptManager.log('delete: pausar\nf3: finalizar', 'log')
     listener.join()
