@@ -21,7 +21,7 @@ class ScriptManager:
             subprocess.call(["taskkill", "/IM", "SystemSettings.exe", "/F"])
             ScriptManager.is_cfg_running = False
         
-    def change_mosuse_sensi():
+    def change_mouse_sensi():
         ScriptManager.manage_config('start')
         
         time.sleep(2)
@@ -60,6 +60,9 @@ class ScriptManager:
         bool = False if ScriptManager.is_mouse_sensi_medium == True else True
         
         ScriptManager.is_mouse_sensi_medium = bool
+        
+        #fechar a config para nao dar erro de coordenada
+        ScriptManager.manage_config('kill')
         
 
 class Actions:
@@ -117,6 +120,7 @@ def on_press(key):
   
     if key == keyboard.Key.delete:
        ScriptManager.pause_keyboard_listener()
+       
     if key == keyboard.Key.f3:
         return False
     
@@ -133,9 +137,9 @@ def on_release(key):
         if key in (keyboard.Key.alt, keyboard.Key.alt_l, keyboard.Key.alt_r):
             Actions.release_alt()
 
-ScriptManager.change_mosuse_sensi()
+ScriptManager.change_mouse_sensi()
 time.sleep(3)
-ScriptManager.change_mosuse_sensi()
+ScriptManager.change_mouse_sensi()
 
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
     log('Running', 'status')
