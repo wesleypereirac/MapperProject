@@ -139,6 +139,7 @@ def on_release(key):
         if key in (keyboard.Key.alt, keyboard.Key.alt_l, keyboard.Key.alt_r):
             Actions.release_alt()
 
+#trocar config
 ScriptManager.change_mouse_sensi()
 
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
