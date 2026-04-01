@@ -116,7 +116,9 @@ class Actions:
             ScriptManager.log('segurando btn direito')
             Actions.is_aimming = True
             
-    def switch_window(to_last_win=False, title='24PILOT'):
+    def switch_window(title='24PILOT'):
+        to_last_win = Actions.response_to_enter_key[0]
+        
         if not to_last_win:
             last_win = None
             current_win = gw.getActiveWindow()
@@ -182,10 +184,11 @@ def on_press(key):
     
     if not ScriptManager.is_script_paused:
         if key == keyboard.Key.enter:
-            if ScriptManager.response_to_enter_key[0]:
+            if Actions.response_to_enter_key[0]:
                 #chama função no indice 1
                 #passa parametro p/ a função identificar oq fazer? (alternar dnv)
-                pass
+                Actions.response_to_enter_key[1]()
+                
             
             
         elif key in (keyboard.Key.ctrl, keyboard.Key.ctrl_l, keyboard.Key.ctrl_r):
@@ -202,7 +205,9 @@ def on_press(key):
             #     -cliques e "esperar" o enter
             # -clicar na aba notas
             # -clicar no campo de entrada
-            
+            Actions.switch_window()
+            Actions.response_to_enter_key = [True, Actions.switch_window]
+
             pass
             
 
@@ -212,12 +217,8 @@ def on_release(key):
             Actions.release_alt()
 
 #trocar config
-Actions.switch_window()
-time.sleep(2)
-Actions.switch_window(True)
 
-
-##DESCOMENTAR ISSO: ScriptManager.change_mouse_sensi()
+ScriptManager.change_mouse_sensi()
 
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
     ScriptManager.log('Running', 'log')
