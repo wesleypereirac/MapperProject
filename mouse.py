@@ -1,6 +1,6 @@
-import pyautogui
+import pygetwindow as gw
 from pynput import keyboard
-import subprocess, time
+import subprocess, time, pyautogui
 
 class ScriptManager:
     is_script_paused = False
@@ -83,7 +83,8 @@ class ScriptManager:
 class Actions:
     is_aimming = False
     alt_holding = False
-    
+    last_window = None
+    response_to_enter_key = [False, 'function']
     #criar aq metodo referente à configuração? ex: ativar/desativasr funções, log e/ou função q muda sensi do touch
     
     #controla disparos de armas
@@ -114,8 +115,58 @@ class Actions:
             pyautogui.mouseDown(button='right')
             ScriptManager.log('segurando btn direito')
             Actions.is_aimming = True
+            
+    def switch_window(to_last_win=False, title='24PILOT'):
+        if not to_last_win:
+            last_win = None
+            current_win = gw.getActiveWindow()
+            windows = gw.getAllTitles()
+            
+            for titulo in windows:
+                if title in titulo:
+                    Actions.last_window = current_win.title
+                    
+                    janela = gw.getWindowsWithTitle(title)[0]
+                    janela.activate()
+                    break
+            ScriptManager.log('Alternando janela', 'Log')
+            
+        else:
+           Actions.switch_back()
+                        # janela = gw.getWindowsWithTitle(Actions.last_window)[0]
+                        # janela.restore()
+                        # janela.activate()
+                        # ScriptManager.log(f'Alternando pra janela anterior\nnome: {Actions.last_window}', 'Log')
+    
+    def switch_back():
+        try:
+            windows = gw.getWindowsWithTitle(Actions.last_window)
+            janela = windows[0]
 
+            if not janela:
+                ScriptManager.log('Nenhuma janela salva', 'Erro')
+                return
 
+            # força estado válido
+            if janela.isMinimized:
+                janela.restore()
+                time.sleep(0.2)
+
+            # hack clássico do Windows
+            try:
+                janela.activate()
+            except:
+                janela.minimize()
+                time.sleep(0.2)
+                janela.restore()
+                time.sleep(0.2)
+                janela.activate()
+
+            ScriptManager.log('Alternando pra janela anterior', 'Log')
+
+        except Exception as e:
+            ScriptManager.log(f'Erro real ao trocar janela: {e}', 'Erro')                     
+            
 
 
 def on_press(key):
@@ -130,12 +181,30 @@ def on_press(key):
         return False
     
     if not ScriptManager.is_script_paused:
-        if key in (keyboard.Key.ctrl, keyboard.Key.ctrl_l, keyboard.Key.ctrl_r):
+        if key == keyboard.Key.enter:
+            if ScriptManager.response_to_enter_key[0]:
+                #chama função no indice 1
+                #passa parametro p/ a função identificar oq fazer? (alternar dnv)
+                pass
+            
+            
+        elif key in (keyboard.Key.ctrl, keyboard.Key.ctrl_l, keyboard.Key.ctrl_r):
             Actions.switch_aim()
 
         elif key in (keyboard.Key.alt, keyboard.Key.alt_l, keyboard.Key.alt_r):
            Actions.hold_alt()
-
+        
+        #abrir notas
+        elif key == keyboard.Key.f2:
+            # -função alternar janela
+            #     -pegar a active window, armazenar (p/ voltar!)
+            #     -alternar p/ 24pilot
+            #     -cliques e "esperar" o enter
+            # -clicar na aba notas
+            # -clicar no campo de entrada
+            
+            pass
+            
 
 def on_release(key):
     if not ScriptManager.is_script_paused:
@@ -143,7 +212,12 @@ def on_release(key):
             Actions.release_alt()
 
 #trocar config
-ScriptManager.change_mouse_sensi()
+Actions.switch_window()
+time.sleep(2)
+Actions.switch_window(True)
+
+
+##DESCOMENTAR ISSO: ScriptManager.change_mouse_sensi()
 
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
     ScriptManager.log('Running', 'log')
