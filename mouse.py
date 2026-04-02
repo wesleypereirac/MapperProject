@@ -120,7 +120,6 @@ class Actions:
         to_last_win = Actions.response_to_enter_key[0]
         
         if not to_last_win:
-            last_win = None
             current_win = gw.getActiveWindow()
             windows = gw.getAllTitles()
             
@@ -188,6 +187,7 @@ def on_press(key):
                 #chama função no indice 1
                 #passa parametro p/ a função identificar oq fazer? (alternar dnv)
                 Actions.response_to_enter_key[1]()
+                ScriptManager.log('terminou de anotar', 'log')
                 
             
             
@@ -199,16 +199,16 @@ def on_press(key):
         
         #abrir notas
         elif key == keyboard.Key.f2:
-            # -função alternar janela
-            #     -pegar a active window, armazenar (p/ voltar!)
-            #     -alternar p/ 24pilot
-            #     -cliques e "esperar" o enter
             # -clicar na aba notas
             # -clicar no campo de entrada
+            Actions.response_to_enter_key = [True]
             Actions.switch_window()
-            Actions.response_to_enter_key = [True, Actions.switch_window]
-
-            pass
+            
+            #aba notas
+            pyautogui.click(736,202)
+            
+            #entrar no campo
+            pyautogui.click(714,435)
             
 
 def on_release(key):
