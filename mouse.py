@@ -5,9 +5,9 @@ import subprocess, time, pyautogui
 class ScriptManager:
     is_script_paused = True
     #mode: important ou understand_flow
-    logs_mode = {'on':True, 'mode':'understand_flow'}
+    logs_mode = {'on':True, 'mode':'important'}
     is_mouse_sensi_medium = True
-    is_running_as_test = True
+    is_running_as_test = False
     
     def pause_keyboard_listener():
         is_script_paused = ScriptManager.is_script_paused 
@@ -59,16 +59,15 @@ class ScriptManager:
             
             time.sleep(2)
             
-            #alterar sensi
-            pyautogui.click(583,27)
+            ##pesquisar opção
+            pyautogui.click(583,27) 
             
-            ##search app
             word = 'touch'
             for i in word:
                 pyautogui.press(i)
             
-            time.sleep(0.5)
-            pyautogui.press('Enter', presses=3)
+            time.sleep(1.5)
+            pyautogui.press('Enter')
             
             ##alterar sensi
             time.sleep(1)
