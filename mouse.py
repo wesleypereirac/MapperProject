@@ -63,8 +63,7 @@ class ScriptManager:
             pyautogui.click(583,27) 
             
             word = 'touch'
-            for i in word:
-                pyautogui.press(i)
+            pyautogui.write(word)
             
             time.sleep(1.5)
             pyautogui.press('Enter')
