@@ -46,6 +46,7 @@ class ScriptManager:
         if mode == 'start':
             subprocess.run(['start', 'ms-settings:'], shell=True)
             ScriptManager.is_cfg_running = True
+            time.sleep(3.5)
         
         else:
             subprocess.call(["taskkill", "/IM", "SystemSettings.exe", "/F"])
@@ -56,8 +57,6 @@ class ScriptManager:
         #para nao executar sem necessidade
         if not ScriptManager.is_running_as_test:
             ScriptManager.manage_config('start')
-            
-            time.sleep(2)
             
             ##pesquisar opção
             pyautogui.click(583,27) 
