@@ -244,5 +244,5 @@ ScriptManager.change_mouse_sensi()
 
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
     ScriptManager.manage_log('Running\n', 'important')
-    ScriptManager.manage_log(['delete: pausar.','f3: finalizar', 'f2: abrir 24pilot', 'ctrl: btn direito', 'alt: btn direito\n'], 'important')
+    ScriptManager.manage_log(['Teclas:\n'' delete: pausar.',' f3: finalizar', ' f2: abrir 24pilot', ' ctrl: btn direito', ' alt: btn direito\n'], 'important')
     listener.join()
